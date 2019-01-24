@@ -4,11 +4,10 @@ const https = require('https');
 // --------------- Helpers that build all of the responses -----------------------
 
 function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
-    var respo = "You should read " + output;
     return {
         outputSpeech: {
             type: 'PlainText',
-		text: respo,
+		text: output,
 		},
 	    card: {
             type: 'Simple',
@@ -68,13 +67,13 @@ function getPassage(callback) {
 	    res.on('end', function() {
 		    var response = JSON.parse(body);
 		    finalPassage = JSON.stringify(response.passage);
-		    callback({}, buildSpeechletResponse('Session Ended', finalPassage, "", false));
+		    var respo = "You should read " + finalPassage;
+		    callback({}, buildSpeechletResponse('Session Ended', respo, "Ask me for a random passage", false));
 		    return response;
 		});
 	}).on('error', function(e) {
 		console.log("Got error: " + e.message);
 	    })
-	// callback({}, buildSpeechletResponse('Session Ended', finalPassage, finalPassage, false));
 	}
 
 
